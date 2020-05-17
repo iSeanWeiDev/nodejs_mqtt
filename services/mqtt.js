@@ -2,9 +2,9 @@ require('dotenv').config()
 const mosca = require( 'mosca' );
 
 const settings = {
-  port: process.env.MQTT_SERVER,
+  port: normalizePort(process.env.MQTT_SERVER || 1883),
 };
- 
+ console.log(settings);
 const server = new mosca.Server(settings);
  
 server.on('clientConnected', function(client) {
@@ -21,6 +21,22 @@ server.on('ready', setup);
 // fired when the mqtt server is ready
 function setup() {
   console.log('Mosca server is up and running');
+}
+
+function normalizePort(val) {
+  const port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
 }
 
 module.exports = server;
