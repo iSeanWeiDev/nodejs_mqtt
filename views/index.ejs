@@ -17,10 +17,24 @@
     <script>
       $(function () {
         $('body').bootstrapMaterialDesign(); 
+        var outDoorData = [];
+        var returnData = [];
 
         var socket = io();
         socket.on('event', function(msg){
           console.log(msg);
+          if(msg.topic == "2677larkinch") {
+            outDoorData.push({
+              x: new Date(msg.data.createdAt),
+              y: parseFloat(msg.data.outdoor)
+            });
+            returnData.push({
+              x: new Date(msg.data.createdAt),
+              y: parseFloat(msg.data.return)
+            })
+          } else {
+
+          }
         });
 
         init();
@@ -31,8 +45,7 @@
             url: "/api/data"
           }).done(function(response) {
             // console.log("response", response);
-            var outDoorData = [];
-            var returnData = [];
+            
             for(var obj of response.device1) {
               outDoorData.push({
                 x: new Date(obj.createdAt),
