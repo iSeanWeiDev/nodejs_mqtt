@@ -8,34 +8,17 @@ const settings = {
 const server = new mosca.Server(settings);
  
 server.on('clientConnected', function(client) {
-    // console.log('client connected', client.id);
+  console.log('client connected', client.id);
 });
- 
-// fired when a message is received
-server.on('published', function(packet, client) {
-  // console.log('Published', packet.payload);
-  console.log(packet.payload.toString())
-});
- 
-server.on('ready', setup);
- 
-// fired when the mqtt server is ready
-function setup() {
-  console.log('Mosca server is up and running');
-}
 
+server.on('ready', () => {
+  console.log(`Mosca server is up and running on port: ${settings.port}`);
+});
+ 
 function normalizePort(val) {
   const port = parseInt(val, 10);
-
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+  if (isNaN(port)) return val;
+  if (port >= 0) return port;
 
   return false;
 }

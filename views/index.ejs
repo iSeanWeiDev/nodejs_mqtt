@@ -5,7 +5,19 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    
+    <h1>MQTT Broker</h1>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+      $(function () {
+        var socket = io();
+        socket.on('event', function(msg){
+          console.log(msg);
+        });
+      });
+    </script>
   </body>
 </html>

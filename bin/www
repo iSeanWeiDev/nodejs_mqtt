@@ -20,7 +20,10 @@ app.set('port', port);
  */
 
 const server = http.createServer(app);
-
+const io = require('socket.io')(server);
+const mattService = require('../services/mqtt');
+const mqttController = require('../controllers/mqttController');
+mqttController(io, mattService);
 /**
  * Listen on provided port, on all network interfaces.
  */
