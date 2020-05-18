@@ -4,16 +4,17 @@ const mosca = require( 'mosca' );
 const settings = {
   port: normalizePort(process.env.MQTT_SERVER || 1883),
 };
- console.log(settings);
+
 const server = new mosca.Server(settings);
  
 server.on('clientConnected', function(client) {
-    console.log('client connected', client.id);
+    // console.log('client connected', client.id);
 });
  
 // fired when a message is received
 server.on('published', function(packet, client) {
-  console.log('Published', packet.payload);
+  // console.log('Published', packet.payload);
+  console.log(packet.payload.toString())
 });
  
 server.on('ready', setup);
