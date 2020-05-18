@@ -1,9 +1,8 @@
 const express = require('express');
+const apiController = require('../controllers/apiController');
 const router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.get('/data', apiController.getAllData);
 
 module.exports = router;
