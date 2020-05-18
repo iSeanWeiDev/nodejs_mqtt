@@ -7,7 +7,8 @@
   </head>
   <body>
     
-    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+    <div id="temperature" style="height: 370px; width: 100%;"></div>
+    <div id="heater" style="height: 370px; width: 100%; margin-top:50px;"></div>
 
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -19,6 +20,8 @@
         $('body').bootstrapMaterialDesign(); 
         var outDoorData = [];
         var returnData = [];
+        var supplyData = [];
+        var circulationData = [];
 
         var socket = io();
         socket.on('event', function(msg){
@@ -57,7 +60,20 @@
                 y: parseFloat(obj.return)
               })
             }
-            var chart = new CanvasJS.Chart("chartContainer", {
+
+            for(var obj of response.device2) {
+              supplyData.push({
+                x: new Date(obj.createdAt),
+                y: parseFloat(obj.supply)
+              });
+
+              circulationData.push({
+                x: new Date(obj.createdAt),
+                y: parseFloat(obj.circulation)
+              })
+            }
+
+            var temperatureChart = new CanvasJS.Chart("temperature", {
               animationEnabled: true,
               theme: "light2",
               title:{
@@ -91,7 +107,7 @@
                 showInLegend: true,
                 name: "Outdoor Temperature",
                 markerType: "square",
-                xValueFormatString: "DD MMM, YYYY",
+                xValueFormatString: "D’th’ MMMM hh:mm tt",
                 color: "#F08080",
                 dataPoints: outDoorData,
               },
@@ -103,7 +119,56 @@
                 dataPoints: returnData,
               }]
             });
-            chart.render();
+            temperatureChart.render();
+
+            var heaterChart = new CanvasJS.Chart("heater", {
+              animationEnabled: true,
+              theme: "light2",
+              title:{
+                text: "Water heater"
+              },
+              axisX:{
+                valueFormatString: "DD MMM",
+                crosshair: {
+                  enabled: true,
+                  snapToDataPoint: true
+                }
+              },
+              axisY: {
+                title: "Temperature",
+                crosshair: {
+                  enabled: true
+                }
+              },
+              toolTip:{
+                shared:true
+              },  
+              legend:{
+                cursor:"pointer",
+                verticalAlign: "bottom",
+                horizontalAlign: "left",
+                dockInsidePlotArea: true,
+                itemclick: toogleDataSeries
+              },
+              data: [{
+                type: "line",
+                showInLegend: true,
+                name: "Supply",
+                markerType: "square",
+                xValueFormatString: "D’th’ MMMM hh:mm tt",
+                color: "#F08080",
+                dataPoints: supplyData,
+              },
+              {
+                type: "line",
+                showInLegend: true,
+                name: "Circulation",
+                lineDashType: "dash",
+                dataPoints: circulationData,
+              }]
+            });
+
+            heaterChart.render();
 
             function toogleDataSeries(e){
               if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
