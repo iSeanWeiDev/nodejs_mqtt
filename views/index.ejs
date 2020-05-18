@@ -61,7 +61,7 @@
               animationEnabled: true,
               theme: "light2",
               title:{
-                text: "Site Traffic"
+                text: "Central Heat"
               },
               axisX:{
                 valueFormatString: "DD MMM",
@@ -71,7 +71,7 @@
                 }
               },
               axisY: {
-                title: "Number of Visits",
+                title: "Temperature",
                 crosshair: {
                   enabled: true
                 }
@@ -89,7 +89,7 @@
               data: [{
                 type: "line",
                 showInLegend: true,
-                name: "Total Visit",
+                name: "Outdoor Temperature",
                 markerType: "square",
                 xValueFormatString: "DD MMM, YYYY",
                 color: "#F08080",
@@ -98,7 +98,7 @@
               {
                 type: "line",
                 showInLegend: true,
-                name: "Unique Visit",
+                name: "Return Temperature",
                 lineDashType: "dash",
                 dataPoints: returnData,
               }]
