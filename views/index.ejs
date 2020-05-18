@@ -25,19 +25,20 @@
 
         var socket = io();
         socket.on('event', function(msg){
-          console.log(msg);
-          if(msg.topic == "2677larkinch") {
-            outDoorData.push({
-              x: new Date(msg.data.createdAt),
-              y: parseFloat(msg.data.outdoor)
-            });
-            returnData.push({
-              x: new Date(msg.data.createdAt),
-              y: parseFloat(msg.data.return)
-            })
-          } else {
+          // console.log(msg);
+          // if(msg.topic == "2677larkinch") {
+          //   outDoorData.push({
+          //     x: new Date(msg.data.createdAt),
+          //     y: parseFloat(msg.data.outdoor)
+          //   });
 
-          }
+          //   returnData.push({
+          //     x: new Date(msg.data.createdAt),
+          //     y: parseFloat(msg.data.return)
+          //   })
+          // } else {
+
+          // }
         });
 
         init();
