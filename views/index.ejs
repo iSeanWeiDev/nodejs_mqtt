@@ -25,14 +25,12 @@
 
         init();
 
-
-        
         function init() {
           $.ajax({
             method: 'GET',
             url: "/api/data"
           }).done(function(response) {
-            console.log("response", response);
+            // console.log("response", response);
             var outDoorData = [];
             var returnData = [];
             for(var obj of response.device1) {
@@ -46,54 +44,53 @@
                 y: parseFloat(obj.return)
               })
             }
-            console.log(outDoorData);
-            // var chart = new CanvasJS.Chart("chartContainer", {
-            //   animationEnabled: true,
-            //   theme: "light2",
-            //   title:{
-            //     text: "Site Traffic"
-            //   },
-            //   axisX:{
-            //     valueFormatString: "DD MMM",
-            //     crosshair: {
-            //       enabled: true,
-            //       snapToDataPoint: true
-            //     }
-            //   },
-            //   axisY: {
-            //     title: "Number of Visits",
-            //     crosshair: {
-            //       enabled: true
-            //     }
-            //   },
-            //   toolTip:{
-            //     shared:true
-            //   },  
-            //   legend:{
-            //     cursor:"pointer",
-            //     verticalAlign: "bottom",
-            //     horizontalAlign: "left",
-            //     dockInsidePlotArea: true,
-            //     itemclick: toogleDataSeries
-            //   },
-            //   data: [{
-            //     type: "line",
-            //     showInLegend: true,
-            //     name: "Total Visit",
-            //     markerType: "square",
-            //     xValueFormatString: "DD MMM, YYYY",
-            //     color: "#F08080",
-            //     dataPoints: outDoorData,
-            //   },
-            //   {
-            //     type: "line",
-            //     showInLegend: true,
-            //     name: "Unique Visit",
-            //     lineDashType: "dash",
-            //     dataPoints: returnData,
-            //   }]
-            // });
-            // chart.render();
+            var chart = new CanvasJS.Chart("chartContainer", {
+              animationEnabled: true,
+              theme: "light2",
+              title:{
+                text: "Site Traffic"
+              },
+              axisX:{
+                valueFormatString: "DD MMM",
+                crosshair: {
+                  enabled: true,
+                  snapToDataPoint: true
+                }
+              },
+              axisY: {
+                title: "Number of Visits",
+                crosshair: {
+                  enabled: true
+                }
+              },
+              toolTip:{
+                shared:true
+              },  
+              legend:{
+                cursor:"pointer",
+                verticalAlign: "bottom",
+                horizontalAlign: "left",
+                dockInsidePlotArea: true,
+                itemclick: toogleDataSeries
+              },
+              data: [{
+                type: "line",
+                showInLegend: true,
+                name: "Total Visit",
+                markerType: "square",
+                xValueFormatString: "DD MMM, YYYY",
+                color: "#F08080",
+                dataPoints: outDoorData,
+              },
+              {
+                type: "line",
+                showInLegend: true,
+                name: "Unique Visit",
+                lineDashType: "dash",
+                dataPoints: returnData,
+              }]
+            });
+            chart.render();
 
             function toogleDataSeries(e){
               if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
