@@ -7,8 +7,11 @@
   </head>
   <body>
     
-    <h1>MQTT Broker</h1>
+    <!-- Create a div where the graph will take place -->
+    <div id="my_dataviz"></div>
 
+    <!-- Load d3.js -->
+    <script src="https://d3js.org/d3.v4.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
@@ -23,6 +26,8 @@
         });
 
         init();
+
+
         
         function init() {
           $.ajax({
@@ -30,6 +35,58 @@
             url: "/api/data"
           }).done(function(response) {
             console.log("response", response);
+            // set the dimensions and margins of the graph
+            var margin = {top: 10, right: 30, bottom: 30, left: 60},
+            width = 460 - margin.left - margin.right,
+            height = 400 - margin.top - margin.bottom;
+
+            // append the svg object to the body of the page
+            var svg = d3.select("#my_dataviz")
+              .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+                .attr("transform",
+                      "translate(" + margin.left + "," + margin.top + ")");
+
+            //Read the data
+            d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv",
+
+              // When reading the csv, I must format variables:
+              function(d){
+                return { date : d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
+              },
+
+              // Now I can use this dataset:
+              function(data) {
+
+                // Add X axis --> it is a date format
+                var x = d3.scaleTime()
+                  .domain(d3.extent(data, function(d) { return d.date; }))
+                  .range([ 0, width ]);
+                svg.append("g")
+                  .attr("transform", "translate(0," + height + ")")
+                  .call(d3.axisBottom(x));
+
+                // Add Y axis
+                var y = d3.scaleLinear()
+                  .domain([0, d3.max(data, function(d) { return +d.value; })])
+                  .range([ height, 0 ]);
+                svg.append("g")
+                  .call(d3.axisLeft(y));
+
+                // Add the line
+                svg.append("path")
+                  .datum(data)
+                  .attr("fill", "none")
+                  .attr("stroke", "steelblue")
+                  .attr("stroke-width", 1.5)
+                  .attr("d", d3.line()
+                    .x(function(d) { return x(d.date) })
+                    .y(function(d) { return y(d.value) })
+                    )
+
+            })
           });
         }
       });
