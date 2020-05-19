@@ -83,7 +83,7 @@
             }
 
             var temperatureChart = new CanvasJS.Chart("temperature", {
-              animationEnabled: false,
+              animationEnabled: true,
               theme: "light2",
               title:{
                 text: "Central Heat"
@@ -130,7 +130,7 @@
             });
 
             var heaterChart = new CanvasJS.Chart("heater", {
-              animationEnabled: false,
+              animationEnabled: true,
               theme: "light2",
               title:{
                 text: "Water heater"
@@ -175,6 +175,9 @@
                 dataPoints: circulationData,
               }]
             });
+            
+            temperatureChart.render();
+            heaterChart.render();
 
             setInterval(() => {
               temperatureChart.render();
